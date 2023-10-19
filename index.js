@@ -77,6 +77,15 @@ async function run() {
       res.send(result);
     });
 
+    // get single users cart items
+    app.get("/cart/:userId", async (req, res) => {
+      const userId = req.params.userId;
+      const query = { userId };
+      const cursor = cartCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
