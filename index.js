@@ -31,6 +31,7 @@ async function run() {
 
     const database = client.db("digitalNestDb");
     const productsCollection = database.collection("productsCollection");
+    const cartCollection = database.collection("productsCollection");
 
     // post and get all products
     app.post("/products", async (req, res) => {
@@ -59,6 +60,19 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const cursor = productsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get and post cart item
+    app.post("/cart", async (req, res) => {
+      const newCart = req.body;
+      const result = await cartCollection.insertOne(newCart);
+      res.send(result);
+    });
+
+    app.get("/cart", async (req, res) => {
+      const cursor = cartCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
