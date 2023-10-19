@@ -27,7 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const database = client.db("digitalNestDb");
     const productsCollection = database.collection("productsCollection");
@@ -49,6 +49,15 @@ async function run() {
     app.get("/products/:brandName", async (req, res) => {
       const brandName = req.params.brandName;
       const query = { brandName: brandName };
+      const cursor = productsCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get a single product
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
       const cursor = productsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
