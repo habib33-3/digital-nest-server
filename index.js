@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import "dotenv/config";
 
 const port = process.env.PORT || 5000;
@@ -32,6 +32,7 @@ async function run() {
     const database = client.db("digitalNestDb");
     const productsCollection = database.collection("productsCollection");
 
+    // post and get all products
     app.post("/products", async (req, res) => {
       const newProduct = req.body;
       const result = await productsCollection.insertOne(newProduct);
@@ -40,6 +41,15 @@ async function run() {
 
     app.get("/products", async (req, res) => {
       const cursor = productsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //  get single brands products
+    app.get("/products/:brandName", async (req, res) => {
+      const brandName = req.params.brandName;
+      const query = { brandName: brandName };
+      const cursor = productsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
     });
