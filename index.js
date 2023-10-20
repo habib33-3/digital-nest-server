@@ -64,6 +64,30 @@ async function run() {
       res.send(result);
     });
 
+    // update a single product
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+
+      const updatedProduct = req.body;
+      // console.log(updatedProduct)
+      const product = {
+        $set: {
+          productImg: updatedProduct.productImg,
+          productName: updatedProduct.productName,
+          brandName: updatedProduct.brandName,
+          productType: updatedProduct.productType,
+          productPrice: updatedProduct.productPrice,
+          rating: updatedProduct.rating,
+        },
+      };
+      console.log(product);
+
+      const result =await productsCollection.updateOne(filter, product);
+
+      res.send(result);
+    });
+
     // get and post cart item
     app.post("/cart", async (req, res) => {
       const newCart = req.body;
