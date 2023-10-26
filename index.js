@@ -31,7 +31,7 @@ async function run() {
 
     const database = client.db("digitalNestDb");
     const productsCollection = database.collection("productsCollection");
-    const cartCollection = database.collection("productsCollection");
+    const cartCollection = database.collection("cartCollection");
 
     // post and get all products
     app.post("/products", async (req, res) => {
